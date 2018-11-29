@@ -1,13 +1,15 @@
+import React from "react";
 import Link from "next/link";
 import NavStyles from "./styles/NavStyles";
 import User from "./User";
+import Signout from "./Signout";
 
 const Nav = () => (
   <User>
     {({ data: { me } }) => (
       <NavStyles>
         <Link href="/items">
-          <a>Shop</a>
+          <a> Shop</a>
         </Link>
         {me && (
           <>
@@ -20,11 +22,12 @@ const Nav = () => (
             <Link href="/me">
               <a>Account</a>
             </Link>
+            <Signout />
           </>
         )}
         {!me && (
           <Link href="/signup">
-            <a>Sign In</a>
+            <a>Signin</a>
           </Link>
         )}
       </NavStyles>
