@@ -17,7 +17,7 @@ const User = props => (
     {payload => props.children(payload)}
   </Query>
 );
-User.PropTypes = {
+User.propTypes = {
   children: PropTypes.func.isRequired
 };
 export default User;
