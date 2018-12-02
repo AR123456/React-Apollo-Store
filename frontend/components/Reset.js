@@ -52,7 +52,7 @@ class Reset extends Component {
             onSubmit={async e => {
               e.preventDefault();
               await reset();
-              this.setState({ password: " ", confirmPassword: " " });
+              this.setState({ password: "", confirmPassword: "" });
             }}
           >
             <fieldset disabled={loading} aria-busy={loading}>
