@@ -6,13 +6,14 @@ enum Permission {
   ITEMDELETE
   PERMISSIONUPDATE
 }
+
 type User {
   id: ID! @unique
   name: String!
   email: String! @unique
   password: String!
   resetToken: String
-  resetTokenExpiry: Float
+  resetTokenExpiry: String
   permissions: [Permission]
   cart: [CartItem!]!
 }
@@ -26,9 +27,10 @@ type Item {
   price: Int!
   user: User!
 }
+
 type CartItem {
   id: ID! @unique
   quantity: Int! @default(value: 1)
-  item: Item! #relationsh  ip to Item
+  item: Item! # relationship to Item
   user: User! # relationship to User
 }

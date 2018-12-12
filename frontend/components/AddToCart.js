@@ -16,7 +16,11 @@ class AddToCart extends React.Component {
     const { id } = this.props;
     return (
       <Mutation mutation={ADD_TO_CART_MUTATION} variables={{ id }}>
-        {addToCart => <button onClick={addToCart}>Add To Cart 🛒 </button>}
+        {(addToCart, { loading }) => (
+          <button disabled={loading} onClick={addToCart}>
+            Add{loading && "ing"} To Cart 🛒{" "}
+          </button>
+        )}
       </Mutation>
     );
   }
