@@ -49,15 +49,17 @@ const Mutations = {
   async deleteItem(parent, args, ctx, info) {
     const where = { id: args.id };
     // 1. find the item
-    const item = await ctx.db.query.item({ where }, `{ id title user {id}}`);
+    const item = await ctx.db.query.item({ where }, `{ id title user { id }}`);
     // 2. Check if they own that item, or have the permissions
     const ownsItem = item.user.id === ctx.request.userId;
     const hasPermissions = ctx.request.user.permissions.some(permission =>
       ["ADMIN", "ITEMDELETE"].includes(permission)
     );
-    if (!ownsItem && hasPermissions) {
-      throw new Error("You do not have persmission to do that");
+
+    if (!ownsItem && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
     }
+
     // 3. Delete it!
     return ctx.db.mutation.deleteItem({ where }, info);
   },
@@ -210,21 +212,21 @@ const Mutations = {
     );
   },
   async addToCart(parent, args, ctx, info) {
-    //make sure they are signed in
+    // 1. Make sure they are signed in
     const { userId } = ctx.request;
     if (!userId) {
-      throw new Error("You must be signed in ");
+      throw new Error("You must be signed in soooon");
     }
-    //query the users current cart
+    // 2. Query the users current cart
     const [existingCartItem] = await ctx.db.query.cartItems({
       where: {
         user: { id: userId },
         item: { id: args.id }
       }
     });
-    // check if that item is already in their cart and increment by 1 if it is
+    // 3. Check if that item is already in their cart and increment by 1 if it is
     if (existingCartItem) {
-      console.log("This item is already in the cart");
+      console.log("This item is already in their cart");
       return ctx.db.mutation.updateCartItem(
         {
           where: { id: existingCartItem.id },
@@ -233,8 +235,7 @@ const Mutations = {
         info
       );
     }
-
-    //if i is not, create a fresh cart item for that user
+    // 4. If its not, create a fresh CartItem for that user!
     return ctx.db.mutation.createCartItem(
       {
         data: {
@@ -250,23 +251,22 @@ const Mutations = {
     );
   },
   async removeFromCart(parent, args, ctx, info) {
-    // find the cart item
+    // 1. Find the cart item
     const cartItem = await ctx.db.query.cartItem(
       {
         where: {
           id: args.id
         }
       },
-      `{id, user {id}}`
+      `{ id, user { id }}`
     );
-    //make sure item is found
-    if (!cartItem) throw new Error("No CartItem Found ");
-
-    // make sure user owns that  cart item
+    // 1.5 Make sure we found an item
+    if (!cartItem) throw new Error("No CartItem Found!");
+    // 2. Make sure they own that cart item
     if (cartItem.user.id !== ctx.request.userId) {
-      throw new Error("Cheating huhhhh");
+      throw new Error("Cheatin huhhhh");
     }
-    // del the cart item
+    // 3. Delete that cart item
     return ctx.db.mutation.deleteCartItem(
       {
         where: { id: args.id }

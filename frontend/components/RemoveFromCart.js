@@ -27,27 +27,24 @@ class RemoveFromCart extends React.Component {
   static propTypes = {
     id: PropTypes.string.isRequired
   };
-  //function fets called as soon as response back from server after mutation performed to make the del item snappy
+  // This gets called as soon as we get a response back from the server after a mutation has been performed
   update = (cache, payload) => {
     console.log("Running remove from cart update fn");
-
-    // read the cache
+    // 1. first read the cache
     const data = cache.readQuery({ query: CURRENT_USER_QUERY });
     console.log(data);
-    //remove item from cart
+    // 2. remove that item from the cart
     const cartItemId = payload.data.removeFromCart.id;
     data.me.cart = data.me.cart.filter(cartItem => cartItem.id !== cartItemId);
-
-    // write it back to the cache
+    // 3. write it back to the cache
     cache.writeQuery({ query: CURRENT_USER_QUERY, data });
   };
-
   render() {
     return (
       <Mutation
         mutation={REMOVE_FROM_CART_MUTATION}
+        variables={{ id: this.props.id }}
         update={this.update}
-        // this is making it snappy
         optimisticResponse={{
           __typename: "Mutation",
           removeFromCart: {
@@ -55,7 +52,6 @@ class RemoveFromCart extends React.Component {
             id: this.props.id
           }
         }}
-        variables={{ id: this.props.id }}
       >
         {(removeFromCart, { loading, error }) => (
           <BigButton
