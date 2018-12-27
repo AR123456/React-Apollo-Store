@@ -9,20 +9,20 @@ Person.prototype.fetchFavFoods = function() {
   });
 };
 describe("mocking learning", () => {
-  it("mocks a ref function", () => {
+  it.skip("mocks a ref function", () => {
     const fetchDogs = jest.fn();
     fetchDogs("snickers");
     expect(fetchDogs).toHaveBeenCalled();
-    expect(fetchDogs).toHaveBeenCalledWith("snickers");
+    expect(fetchDogs).toHaveBeenCalledWit.skiph("snickers");
     fetchDogs("hugo");
     expect(fetchDogs).toHaveBeenCalledTimes(2);
   });
-  it("Can create a person", () => {
-    const me = new Person("AR", ["fruit", "nuts"]);
+  it.skip("Can create a person", () => {
+    const me = new Person("AR", ["fruit.skip", "nuts"]);
     expect(me.name).toBe("AR");
   });
-  it("can fetch foods", async () => {
-    const me = new Person("AR", ["fruit", "nuts"]);
+  it.skip("can fetch foods", async () => {
+    const me = new Person("AR", ["fruit.skip", "nuts"]);
     //mock favFoods Function
     me.fetchFavFoods = jest.fn().mockResolvedValue(["yogert", "berrys"]);
     const favFoods = await me.fetchFavFoods();
